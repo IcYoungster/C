@@ -14,11 +14,13 @@ void PrintList(SqList L)
         printf("%-3d",L.data[i]);
     }
 }
+
+//The first pramas enquires a "&" than the PrintList Function
+//which is referance,that could make you directly manipulate
+//the data inside the struct
 int Insert(SqList& L, int position, ElemType NewData)
 {
     int i = position;
-    
-    //if List length equals MAXSIZE, we can't Insert too... Sad,is't it?
     if(L.length == MAXSIZE)
     {
         printf("Insert Failed.List Full");
@@ -37,19 +39,38 @@ int Insert(SqList& L, int position, ElemType NewData)
     return 0;
 }
 
+//whay if i type data wrong?well i definitely need to delete it or replace it.
+//so here comes the Delete Function to help us
+void Delete(SqList& L,int position)
+{
+    int i = position;
+    //so delete is simply reverse of the Insert
+    //first we need to make sure it's legal to remove that data
+    //then we locate the data we need to remove
+    //then delete it,but still need to change the length of the List
+    //also,we need to swap them to fill the blank
+    if (i <= L.length - 1 || i >= 1) // legal position is [1,length-1]
+    {
+        int j = i - 1;//the param j equals the Array index
+        L.data[j] = 0;//actually you don't even need this,but just for safety
+        for (; j <= L.length - 1; j++)//swap till j equals last of Array index
+        {
+            L.data[j] = L.data[j + 1];
+        }
+        L.length -= 1;
+    }
+}
+
 int main()
 {
-    //Test
-    SqList L1,L2;
+    SqList L1;
     L1.length = 3;
-    L2.length = 49;
     L1.data[0] = 1;
     L1.data[1] = 2;
     L1.data[2] = 3;
-    L2.data[49]= 0;
     Insert(L1,4,9);
-    Insert(L2,50,9);
     PrintList(L1);
     printf("\n");
-    PrintList(L2);
+    Delete(L1,4);
+    PrintList(L1);
 }
