@@ -49,6 +49,38 @@ void Delete(SqList& L,int position)
     }
 }
 
+//As it looks,we use this function to find data by value
+//this function is easy,just loop the list,test every data,
+//see if it euqals to what you are looking for
+//well,this is the most stupid way to search,
+//but in the future we will make some improvement
+void FindByValue(SqList L, ElemType Data)
+{
+    for (int j = 0; j < L.length; j++)
+    {
+        if (L.data[j] == Data)
+        {
+            printf("The number is %d in the list",j+1);
+            break;
+        }
+    }
+}
+
+//This function is used to get data for a specific location
+//so first things first,we need to judge the location to see whether is's legal
+//then give back the data of the location if it exist
+//give a NULL back if it does't exist
+ElemType FindByNum(SqList L,int location)
+{
+    int i = location;
+    //legal postion equals to [1,L.length-1]
+    if(i>=1 || i<=L.length-1)
+    {
+        return L.data[i-1];
+    }
+    return 0;
+}
+
 int main()
 {
     SqList L1;
@@ -56,9 +88,7 @@ int main()
     L1.data[0] = 1;
     L1.data[1] = 2;
     L1.data[2] = 3;
-    Insert(L1,4,9);
-    PrintList(L1);
-    printf("\n");
-    Delete(L1,4);
-    PrintList(L1);
+    //FindByValue(L1,2);
+    int ret = FindByNum(L1,1);
+    printf("%d",ret);
 }
