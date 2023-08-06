@@ -15,9 +15,6 @@ void PrintList(SqList L)
     }
 }
 
-//The first pramas enquires a "&" than the PrintList Function
-//which is referance,that could make you directly manipulate
-//the data inside the struct
 int Insert(SqList& L, int position, ElemType NewData)
 {
     int i = position;
@@ -39,21 +36,12 @@ int Insert(SqList& L, int position, ElemType NewData)
     return 0;
 }
 
-//whay if i type data wrong?well i definitely need to delete it or replace it.
-//so here comes the Delete Function to help us
 void Delete(SqList& L,int position)
 {
     int i = position;
-    //so delete is simply reverse of the Insert
-    //first we need to make sure it's legal to remove that data
-    //then we locate the data we need to remove
-    //then delete it,but still need to change the length of the List
-    //also,we need to swap them to fill the blank
-    if (i <= L.length - 1 || i >= 1) // legal position is [1,length-1]
+    if (i <= L.length - 1 || i >= 1) 
     {
-        int j = i - 1;//the param j equals the Array index
-        L.data[j] = 0;//actually you don't even need this,but just for safety
-        for (; j <= L.length - 1; j++)//swap till j equals last of Array index
+        for (int j = i - 1; j <= L.length - 1; j++)
         {
             L.data[j] = L.data[j + 1];
         }
