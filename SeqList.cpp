@@ -6,6 +6,18 @@ typedef struct{
     int length;
 }SqList;
 
+//make the List more standard,initialize it with full zero
+//so we don't meet the "dirty data"
+void InitList(SqList &L)
+{
+    int i = 0;
+    for (int i = 0; i < MAXSIZE; i++)
+    {
+        L.data[i] = 0;
+    }
+    L.length = 0;//this step IS of vital improtance,you can ignore the part of giving 0,but not for this 
+}
+
 void PrintList(SqList L)
 {
     int i=0;
@@ -49,11 +61,6 @@ void Delete(SqList& L,int position)
     }
 }
 
-//As it looks,we use this function to find data by value
-//this function is easy,just loop the list,test every data,
-//see if it euqals to what you are looking for
-//well,this is the most stupid way to search,
-//but in the future we will make some improvement
 void FindByValue(SqList L, ElemType Data)
 {
     for (int j = 0; j < L.length; j++)
@@ -66,14 +73,9 @@ void FindByValue(SqList L, ElemType Data)
     }
 }
 
-//This function is used to get data for a specific location
-//so first things first,we need to judge the location to see whether is's legal
-//then give back the data of the location if it exist
-//give a NULL back if it does't exist
 ElemType FindByNum(SqList L,int location)
 {
     int i = location;
-    //legal postion equals to [1,L.length-1]
     if(i>=1 || i<=L.length-1)
     {
         return L.data[i-1];
@@ -84,6 +86,7 @@ ElemType FindByNum(SqList L,int location)
 int main()
 {
     SqList L1;
+    InitList(L1);
     L1.length = 3;
     L1.data[0] = 1;
     L1.data[1] = 2;
