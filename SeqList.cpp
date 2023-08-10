@@ -6,8 +6,6 @@ typedef struct{
     int length;
 }SqList;
 
-//make the List more standard,initialize it with full zero
-//so we don't meet the "dirty data"
 void InitList(SqList &L)
 {
     int i = 0;
@@ -15,7 +13,7 @@ void InitList(SqList &L)
     {
         L.data[i] = 0;
     }
-    L.length = 0;//this step IS of vital improtance,you can ignore the part of giving 0,but not for this 
+    L.length = 0;
 }
 
 void PrintList(SqList L)
