@@ -7,35 +7,20 @@ typedef struct{
     int length;
 }SqList;
 
-//the upper one was good, but as we reached the MAXSIZE,we could never fill a single data into it
-//but Dynamic SeqList, which allows us to add the maxsize of list freely
-#define InitSize 10//define the dynamic list first size of data
+#define InitSize 10
 typedef struct{
-    ElemType *data;//this pointer pointed to the first data of the list, aka address
+    ElemType *data;
     int MaxSize;
-    int length;//record recent length
+    int length;
 }DySeqList;
-//so how to apply for a space dynamically?
-//C language use the key word "malloc" to apply and the "free" to give space back
 
 void DyInitList(DySeqList &DL)
 {
-    //malloc give back a pointer,so we need to trans with force
-    //the space we need is euqals to = size(number) * size of type
     DL.data = (ElemType*)malloc(InitSize*sizeof(ElemType));
     DL.length = 0;
     DL.MaxSize = InitSize;
 }
 
-//add a function to increase the lenth of Dynamic Seqlist
-//main idea is to create a new list with extra length,
-//then swap all the data to the new list, delete the old one in the end
-//followed with few steps:
-//1.define a pointer pointed to DL.data,this pointer is a temporary container
-//2.apply more space for "DL.data" List
-//3.swap data one by one from that temp pointer to our new "DL.data"
-//4.change the params like length and maxsize.
-//5.free temp pointer,which actually freed the space pointed to
 void IncreaseSize(DySeqList &DL,int length)
 {
     ElemType *TempPointer = DL.data;
@@ -97,9 +82,11 @@ int Insert(SqList& L, int position, ElemType NewData)
     return 0;
 }
 
-void Delete(SqList& L,int position)
+bool Delete(SqList& L,int position, ElemType &DelData)
 {
     int i = position;
+    bool ret = false;//ret var is for record the state of return value
+    DelData = (ElemType)L.data[i];//take DelData back
     if (i <= L.length - 1 || i >= 1) 
     {
         for (int j = i - 1; j <= L.length - 1; j++)
@@ -107,7 +94,13 @@ void Delete(SqList& L,int position)
             L.data[j] = L.data[j + 1];
         }
         L.length -= 1;
+        ret = true;
+        //could just return the DelData here
+        //printf("Delete succeed! it's No.%d,%d\n",i,DelData);
+    }else{
+        ret = false;
     }
+    return ret;
 }
 
 void FindByValue(SqList L, ElemType Data)
@@ -134,7 +127,6 @@ ElemType FindByNum(SqList L,int location)
 
 int main()
 {
-    //SqList L1 = {{1,1,1},3}; could like this,but don't initial
     SqList L1;
     DySeqList L2;
     InitList(L1);
@@ -144,13 +136,8 @@ int main()
     L1.data[0] = 1;
     L1.data[1] = 1;
     L1.data[2] = 1;
-    L2.data[0] = 9;
-    L2.data[1] = 9;
-    L2.data[2] = 9;
+    int e = -1;
+    Delete(L1,2,e);
+    printf("删除的元素是%d\n",e);
     PrintList(L1);
-    printf("\n");
-    PrintDyList(L2);
-    printf("\n");
-    IncreaseSize(L2,3);
-    PrintDyList(L2);
-}
+    }
