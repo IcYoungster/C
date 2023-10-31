@@ -29,46 +29,10 @@ void PrintList(LinkedList List)
     }
 }
 
-bool Insert(LinkedList &List, ElemType NewData, int position)
-{
-    int p = position;
-    int i = 0;
-    LNode *TempPointer;
-    TempPointer = List;
-
-    while ( i < p - 1)
-    {
-        TempPointer = TempPointer->Next;
-        i++;
-    }
-
-    LNode *NewNode = (LNode *)malloc(sizeof(LNode));
-    NewNode->data = NewData;
-    NewNode->Next = TempPointer->Next;
-    TempPointer->Next = NewNode;
-
-    return true;
-}
-
-// define a function to build LinkedList from scratch,
-// it conprised with initial and add new data Node,
-// which would help us when there are plenties of Data
-
-// There are two different ways to insert elements in the Linked List
-// 1.Insert new Node after Head Node of the list, name the function as HeadInsert
-    // To add a new Node after the HeadNode like this:
-    // HeadPointer -> HeadNode -> NULL
-    // HeadPointer -> HeadNode ->New Node 1 ->NULL
-    // HeadPointer -> HeadNode ->New Node 2 ->New Node 1 ->NULL
-// 2.Insert new Node after the last Node of the List,name it RearInsert
-    // HeadPointer -> HeadNode -> NULL
-    // HeadPointer -> HeadNode ->New Node 1 ->NULL
-    // HeadPointer -> HeadNode ->New Node 1 ->New Node 2 ->NULL
+/*Init List Start*/
 
 LinkedList HeadInsert(LinkedList &List)
 {
-    // First we Create the LinkedList with HeadNode,Same with the "InitLinkedList"
-    // Then Set a Number, Control the Loop, Insert the Data
     List = (LNode *)malloc(sizeof(LNode));
     List->Next = NULL;
 
@@ -86,7 +50,6 @@ LinkedList HeadInsert(LinkedList &List)
     return List;
 }
 
-//Pretty much same with HeadInsert, but add a RearNode
 LinkedList RearInsert(LinkedList &List)
 {
     List = (LNode *)malloc(sizeof(LNode));
@@ -99,10 +62,6 @@ LinkedList RearInsert(LinkedList &List)
     scanf("%d",&i);
     while (i != 9999)
     {
-        // Create a NewNode,Then Insert it at the end
-        // At first,RearNode & List all pointed to HeadNode,
-        // so RearNode->Next == HeadNode->Next
-        // Then let RearNode pointed to NewNode
         NewNode = (LNode*)malloc(sizeof(LNode));
         NewNode->data = i;
         RearNode->Next = NewNode;
@@ -111,6 +70,70 @@ LinkedList RearInsert(LinkedList &List)
     }
     return List;
 }
+
+/*Init List Done*/
+
+
+/*Three different ways to insert New Node*/
+
+// 1.Insert by position
+bool Insert(LinkedList &List, ElemType NewData, int position)
+{
+    int p = position;
+    int i = 0;
+    LNode *TempPointer;
+    TempPointer = List;
+
+    while ( i < p - 1)
+    {
+        TempPointer = TempPointer->Next;
+        i++;
+    }
+
+    // 2&3 actually could replace this part
+    // by using InsertNextNode(TempPointer,NewData);
+    LNode *NewNode = (LNode *)malloc(sizeof(LNode));
+    NewNode->data = NewData;
+    NewNode->Next = TempPointer->Next;
+    TempPointer->Next = NewNode;
+
+    return true;
+}
+
+// 2.Insert after a specific Node "p"
+bool InsertNextNode(LNode *p,ElemType NewData)
+{
+    LNode *NewNode = (LNode *)malloc(sizeof(LNode));
+    if ((p == NULL) || (NewNode == NULL))
+    {
+        return false;
+    }
+    NewNode->data = NewData;
+    NewNode->Next = p->Next;
+    p->Next = NewNode;
+    return true;
+}
+
+// 3. Insert before a Node "p"
+//But the question is we don't have the address of p's prior Node
+//One way is to give the HeadNode then traversal to find the prior Node, which is slow
+//The other way is to add a New Node then duplicate data of "p" to the new,
+//then fill "p" with NewData,
+bool InsertPriorNode(LNode* p,ElemType NewData)
+{
+    LNode *NewNode = (LNode *)malloc(sizeof(LNode));
+    if ((p == NULL) || (NewNode == NULL))
+    {
+        return false;
+    }
+    NewNode->data = p->data;
+    NewNode->Next = p->Next;
+    p->data = NewData;
+    p->Next = NewNode;
+    return true;
+}
+
+/*Insert Done*/
 
 int main()
 {
