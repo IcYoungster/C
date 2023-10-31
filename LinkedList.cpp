@@ -29,8 +29,6 @@ void PrintList(LinkedList List)
     }
 }
 
-/*Init List Start*/
-
 LinkedList HeadInsert(LinkedList &List)
 {
     List = (LNode *)malloc(sizeof(LNode));
@@ -71,12 +69,6 @@ LinkedList RearInsert(LinkedList &List)
     return List;
 }
 
-/*Init List Done*/
-
-
-/*Three different ways to insert New Node*/
-
-// 1.Insert by position
 bool Insert(LinkedList &List, ElemType NewData, int position)
 {
     int p = position;
@@ -100,7 +92,6 @@ bool Insert(LinkedList &List, ElemType NewData, int position)
     return true;
 }
 
-// 2.Insert after a specific Node "p"
 bool InsertNextNode(LNode *p,ElemType NewData)
 {
     LNode *NewNode = (LNode *)malloc(sizeof(LNode));
@@ -114,11 +105,6 @@ bool InsertNextNode(LNode *p,ElemType NewData)
     return true;
 }
 
-// 3. Insert before a Node "p"
-//But the question is we don't have the address of p's prior Node
-//One way is to give the HeadNode then traversal to find the prior Node, which is slow
-//The other way is to add a New Node then duplicate data of "p" to the new,
-//then fill "p" with NewData,
 bool InsertPriorNode(LNode* p,ElemType NewData)
 {
     LNode *NewNode = (LNode *)malloc(sizeof(LNode));
@@ -133,7 +119,56 @@ bool InsertPriorNode(LNode* p,ElemType NewData)
     return true;
 }
 
-/*Insert Done*/
+/*Delete Nodes*/
+
+//Find and Delete,if delete No.p,find p-1,link (p-1) to (p+1),then free p
+bool DeleteByPosition(LinkedList &List,int position,ElemType &DeletedData)
+{
+    //List with HeadNode so can't delete The First Node
+
+    //Using a TempPointer to Travesal and Manipulate the list
+    //Using pointer "Delete" to show which Node should be deleted
+
+    if(position<1){return false;}
+    LNode* Temp,*Delete;
+
+    // 1.Find
+    // Create a index to show where the "Temp" is.Then Traversal the List
+    int i = 0;
+    Temp = List;
+    while (i < position - 1)
+    {
+        Temp = Temp->Next;
+        i++;
+    }
+
+    // 2.Delete
+    
+    //Edge consideration
+    if(Temp == NULL || Temp->Next == NULL)
+    {return false;}
+
+    Delete = Temp->Next;
+    DeletedData = Delete->data;
+    Temp->Next = Delete->Next;
+    free(Delete);
+
+    return true;
+}
+
+//can't directly modifying the prior Node->next to free p,
+//so exchange data with the next one,then release the next one
+//but if p is the last of List,it will not work, need to know the HeadNode's address
+bool DeleteNode(LNode*p)
+{
+    if(p == NULL){return false;}
+
+    LNode* Deleted = p->Next;
+    p->data = p->Next->data;//or just Deleted->data
+    p->Next = Deleted->Next;
+    free(Deleted);
+    return true;
+}
 
 int main()
 {
@@ -143,8 +178,6 @@ int main()
     // Now Initialized it,we create a Head Node for convinience
     //InitLinkedList(L);
 
-    // Then we can fill The List with data
-    // But insert Data on by one is STUPID!
     HeadInsert(L1);
     RearInsert(L2);
     PrintList(L1);
